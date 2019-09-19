@@ -1,15 +1,5 @@
-module "label" {
-  source     = "git::https://github.com/dieple/terraform-modules-011x.git//terraform-terraform-label"
-  namespace  = "${var.namespace}"
-  stage      = "${var.stage}"
-  name       = "${var.name}"
-  delimiter  = "${var.delimiter}"
-  attributes = "${var.attributes}"
-  tags       = "${var.tags}"
-}
-
 resource "aws_iam_role" "bastion_role" {
-  name = "${module.label.id}-role"
+  name = "${var.bastion_name}-role"
 
   assume_role_policy = <<EOF
 {
@@ -28,7 +18,7 @@ EOF
 }
 
 resource "aws_iam_role_policy" "bastion_role_policy" {
-  name   = "${module.label.id}-role-policy"
+  name   = "${var.bastion_name}-role-policy"
   role   = "${aws_iam_role.bastion_role.id}"
   policy = "${data.aws_iam_policy_document.bastion_policy_document.json}"
 }
@@ -50,12 +40,12 @@ data "aws_iam_policy_document" "bastion_policy_document" {
 }
 
 resource "aws_iam_policy" "bastion_policy" {
-  name   = "${module.label.id}-iam-policy"
+  name   = "${var.bastion_name}-iam-policy"
   policy = "${data.aws_iam_policy_document.bastion_policy_document.json}"
 }
 
 resource "aws_iam_instance_profile" "bastion_instance_profile" {
-  name = "${module.label.id}-instance-profile"
+  name = "${var.bastion_name}-instance-profile"
   path = "/"
   role = "${aws_iam_role.bastion_role.name}"
 }
@@ -89,13 +79,12 @@ data "template_file" "bastion_init_script" {
   template = "${file("${path.module}/user_data/user_data.sh")}"
 
   vars {
-    allocation_id   = "${aws_eip.bastion.id}"
-    welcome_message = "${var.stage}"
-    public_key      = "${var.public_key_data == "" ? data.local_file.public_key.content: var.public_key_data}"
-    ssh_user        = "${var.ssh_user}"
-    environment     = "${var.environment}"
-    user_data       = "${join("\n", var.user_data)}"
-    region          = "${data.aws_region.current.name}"
+    allocation_id = "${aws_eip.bastion.id}"
+    public_key    = "${var.public_key_data == "" ? data.local_file.public_key.content: var.public_key_data}"
+    ssh_user      = "${var.ssh_user}"
+    environment   = "${var.environment}"
+    user_data     = "${join("\n", var.user_data)}"
+    region        = "${data.aws_region.current.name}"
   }
 }
 
@@ -112,7 +101,7 @@ resource "aws_route53_record" "bastion" {
 #---------------------------------------------------
 
 resource "aws_security_group" "allow_ssh_sg" {
-  name        = "${module.label.id}-allow-ssh-sg"
+  name        = "${var.bastion_name}-allow-ssh-sg"
   description = "Allow all SSH only inbound"
   vpc_id      = "${var.vpc_id}"
   tags        = "${var.tags}"
@@ -138,7 +127,7 @@ resource "aws_security_group" "allow_ssh_sg" {
 
 # Create the configuration for an ASG
 resource "aws_launch_configuration" "as_conf" {
-  name_prefix          = "${module.label.id}-lc"
+  name_prefix          = "${var.bastion_name}-lc"
   image_id             = "${data.aws_ami.ami.id}"
   instance_type        = "${var.instance_type}"
   key_name             = "${var.key_name}"
@@ -159,7 +148,7 @@ resource "aws_launch_configuration" "as_conf" {
 }
 
 resource "aws_autoscaling_group" "bastion_asg" {
-  name                      = "${module.label.id}-asg"
+  name                      = "${var.bastion_name}-asg"
   vpc_zone_identifier       = ["${var.public_subnets}"]
   health_check_type         = "EC2"
   launch_configuration      = "${aws_launch_configuration.as_conf.name}"

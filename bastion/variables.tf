@@ -1,28 +1,6 @@
-variable "namespace" {
-  description = "Namespace (e.g. `eg` or `cp`)"
-  type        = "string"
-}
-
-variable "stage" {
-  description = "Stage (e.g. `prod`, `dev`, `staging`)"
-  type        = "string"
-}
-
-variable "name" {
+variable "bastion_name" {
   description = "Name  (e.g. `app` or `bastion`)"
   type        = "string"
-}
-
-variable "delimiter" {
-  type        = "string"
-  default     = "-"
-  description = "Delimiter to be used between `namespace`, `stage`, `name` and `attributes`"
-}
-
-variable "attributes" {
-  type        = "list"
-  default     = []
-  description = "Additional attributes (e.g. `1`)"
 }
 
 variable "tags" {

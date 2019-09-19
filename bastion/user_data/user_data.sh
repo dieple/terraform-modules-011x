@@ -3,9 +3,6 @@
 apt-get update
 apt-get -y install figlet jq make mysql mysql-client vim bzip2 curl git htop iftop inotify-tools iotop lsof lzop netcat net-tools ntp python-pip python-selinux screen strace tcpdump tcptraceroute telnet tree unzip wget
 
-# Generate system banner
-figlet "${welcome_message}" > /etc/motd
-
 ##
 ## Setup SSH Config
 ##

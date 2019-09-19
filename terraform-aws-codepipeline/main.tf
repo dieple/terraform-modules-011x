@@ -29,7 +29,7 @@ data "aws_kms_secrets" "dataops_webhooks_token" {
 }
 
 module "codepipeline_label" {
-  source     = "git::https://github.com/dieple/terraform-modules-011x.git//terraform-terraform-label"
+  source     = "git::ssh://git@github.com/dieple/terraform-modules-011x.git//terraform-terraform-label"
   attributes = ["${compact(concat(var.attributes, list("codepipeline")))}"]
   delimiter  = "${var.delimiter}"
   name       = "${var.name}"
@@ -47,7 +47,7 @@ resource "aws_s3_bucket" "default" {
 }
 
 module "codepipeline_assume_label" {
-  source     = "https://github.com/dieple/terraform-modules-011x.git//terraform-terraform-label"
+  source     = "git::ssh://git@github.com/dieple/terraform-modules-011x.git//terraform-terraform-label"
   attributes = ["${compact(concat(var.attributes, list("codepipeline", "assume")))}"]
   delimiter  = "${var.delimiter}"
   name       = "${var.name}"
@@ -57,7 +57,7 @@ module "codepipeline_assume_label" {
 }
 
 module "codepipeline_s3_policy_label" {
-  source     = "https://github.com/dieple/terraform-modules-011x.git//terraform-terraform-label"
+  source     = "git::ssh://git@github.com/dieple/terraform-modules-011x.git//terraform-terraform-label"
   attributes = ["${compact(concat(var.attributes, list("codepipeline", "s3")))}"]
   delimiter  = "${var.delimiter}"
   name       = "${var.name}"
@@ -73,7 +73,7 @@ resource "aws_iam_policy" "s3" {
 }
 
 module "codebuild_label" {
-  source     = "https://github.com/dieple/terraform-modules-011x.git//terraform-terraform-label"
+  source     = "git::ssh://git@github.com/dieple/terraform-modules-011x.git//terraform-terraform-label"
   attributes = ["${compact(concat(var.attributes, list("codebuild")))}"]
   delimiter  = "${var.delimiter}"
   name       = "${var.name}"
