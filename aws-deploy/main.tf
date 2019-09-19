@@ -1,6 +1,6 @@
 # labels resource for naming and tags
 module "label" {
-  source      = "https://github.com/dieple/terraform-modules-011x.git//terraform-terraform-label"
+  source      = "git::https://github.com/dieple/terraform-modules-011x.git//terraform-terraform-label"
   namespace   = "${var.namespace}"
   name        = "${var.name}"
   stage       = "${var.stage}"
@@ -50,7 +50,7 @@ module "elb_sg" {
 
 # elastic load balancer
 module "elb" {
-  source                      = "https://github.com/dieple/terraform-modules-011x.git//elb"
+  source                      = "git::https://github.com/dieple/terraform-modules-011x.git//elb"
   name                        = "${module.label.id}"
   subnets                     = ["${var.subnets}"]
   security_groups             = ["${module.elb_sg.this_security_group_id}"]
@@ -67,7 +67,7 @@ module "elb" {
 
 # autoscaling
 module "asg" {
-  source                      = "https://github.com/dieple/terraform-modules-011x.git//autoscaling-group"
+  source                      = "git::https://github.com/dieple/terraform-modules-011x.git//autoscaling-group"
   name                        = "${module.label.id}"
   lc_name                     = "${module.label.id}-lc"
   image_id                    = "${var.ami_id}"

@@ -8,7 +8,7 @@ locals {
 data "aws_caller_identity" "current" {}
 
 module "s3_bucket_label" {
-  source      = "https://github.com/dieple/terraform-modules-011x.git//terraform-terraform-label"
+  source      = "git::https://github.com/dieple/terraform-modules-011x.git//terraform-terraform-label"
   namespace   = "${var.namespace}"
   stage       = "${var.stage}"
   name        = "${var.name}"
@@ -110,7 +110,7 @@ data "aws_iam_policy_document" "prevent_unencrypted_uploads" {
 }
 
 module "aggregated_policy" {
-  source = "https://github.com/dieple/terraform-modules-011x.git//terraform-aws-iam-policy-document-aggregator"
+  source = "git::https://github.com/dieple/terraform-modules-011x.git//terraform-aws-iam-policy-document-aggregator"
 
   source_documents = [
     "${local.policy1}",
@@ -150,7 +150,7 @@ resource "aws_s3_bucket_public_access_block" "default" {
 }
 
 module "dynamodb_table_label" {
-  source      = "https://github.com/dieple/terraform-modules-011x.git//terraform-terraform-label"
+  source      = "git::https://github.com/dieple/terraform-modules-011x.git//terraform-terraform-label"
   namespace   = "${var.namespace}"
   stage       = "${var.stage}"
   name        = "${var.name}"

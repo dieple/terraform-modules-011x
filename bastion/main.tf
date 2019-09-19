@@ -1,5 +1,5 @@
 module "label" {
-  source     = "https://github.com/dieple/terraform-modules-011x.git//terraform-terraform-label"
+  source     = "git::https://github.com/dieple/terraform-modules-011x.git//terraform-terraform-label"
   namespace  = "${var.namespace}"
   stage      = "${var.stage}"
   name       = "${var.name}"
