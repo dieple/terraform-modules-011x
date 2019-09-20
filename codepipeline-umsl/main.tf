@@ -1,7 +1,7 @@
 locals {
   enabled                = "${var.enabled == "true" ? true : false}"
-  dataops_oauth_token    = "${data.aws_kms_secrets.dataops_oauth_token.plaintext[var.sm_oauth_token_secret_name]}"
-  dataops_webhooks_token = "${data.aws_kms_secrets.dataops_webhooks_token.plaintext[var.sm_webhooks_token_secret_name]}"
+  umsl_oauth_token    = "${data.aws_kms_secrets.umsl_oauth_token.plaintext[var.sm_oauth_token_secret_name]}"
+  umsl_webhooks_token = "${data.aws_kms_secrets.umsl_webhooks_token.plaintext[var.sm_webhooks_token_secret_name]}"
 }
 
 provider "github" {
@@ -14,14 +14,14 @@ data "aws_caller_identity" "default" {}
 
 data "aws_region" "default" {}
 
-data "aws_kms_secrets" "dataops_oauth_token" {
+data "aws_kms_secrets" "umsl_oauth_token" {
   secret {
     name    = "${var.sm_oauth_token_secret_name}"
     payload = "${var.github_oauth_token}"
   }
 }
 
-data "aws_kms_secrets" "dataops_webhooks_token" {
+data "aws_kms_secrets" "umsl_webhooks_token" {
   secret {
     name    = "${var.sm_webhooks_token_secret_name}"
     payload = "${var.github_webhooks_token}"
@@ -104,7 +104,7 @@ resource "aws_codepipeline" "codepipeline" {
       output_artifacts = ["code"]
 
       configuration {
-        OAuthToken           = "${local.dataops_oauth_token}"
+        OAuthToken           = "${local.umsl_oauth_token}"
         Owner                = "${var.github_repo_owner}"
         Repo                 = "${var.github_repo_names}"
         Branch               = "${var.github_repo_branch}"
@@ -198,7 +198,7 @@ resource "aws_codebuild_project" "codebuild_docker_image" {
       },
       {
         "name"  = "GITHUB_TOKEN"
-        "value" = "${signum(length(local.dataops_oauth_token)) == 1 ? local.dataops_oauth_token : "UNSET"}"
+        "value" = "${signum(length(local.umsl_oauth_token)) == 1 ? local.umsl_oauth_token : "UNSET"}"
       },
       {
         "name"  = "GITHUB_REPO_NAME"

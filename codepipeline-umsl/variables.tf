@@ -18,15 +18,15 @@ variable "enabled" {
   description = "Enable `CodePipeline` creation"
 }
 
-variable "ecs_cluster_name" {
-  type        = "string"
-  description = "ECS Cluster Name"
-}
+//variable "ecs_cluster_name" {
+//  type        = "string"
+//  description = "ECS Cluster Name"
+//}
 
-variable "ecs_service_name" {
-  type        = "string"
-  description = "ECS Service Name"
-}
+//variable "ecs_service_name" {
+//  type        = "string"
+//  description = "ECS Service Name"
+//}
 
 variable "github_oauth_token" {
   type        = "string"
@@ -140,7 +140,7 @@ variable "environment_variables" {
 
 variable "webhook_enabled" {
   description = "Set to false to prevent the module from creating any webhook resources"
-  default     = "true"
+  default     = "false"
 }
 
 variable "webhook_target_action" {
@@ -211,8 +211,8 @@ variable "github_repo_branch" {}
 
 variable "ecr_repo_uri" {}
 variable "github_repo_owner" {}
-variable "eks_cluster_name" {}
-variable "eks_kubectl_role_arn" {}
+//variable "eks_cluster_name" {}
+//variable "eks_kubectl_role_arn" {}
 variable "codebuild_service_policy_arn" {}
 variable "codebuild_service_role_arn" {}
 variable "source_location" {}
