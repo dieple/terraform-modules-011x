@@ -6,10 +6,6 @@ output "asg_arn" {
   value = "${aws_autoscaling_group.umsl_asg.arn}"
 }
 
-output "aws_security_group_allow_ssh_id" {
-  value = "${aws_security_group.allow_ssh_sg.id}"
-}
-
 output "autoscaling_group_name" {
   value = "${aws_autoscaling_group.umsl_asg.name}"
 }
@@ -20,7 +16,7 @@ output "ssh_user" {
 }
 
 output "security_group_id" {
-  value       = "${aws_security_group.allow_ssh_sg.id}"
+  value       = "${aws_security_group.umsl_sg.id}"
   description = "Security group ID"
 }
 
