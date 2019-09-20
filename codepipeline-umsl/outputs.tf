@@ -5,6 +5,10 @@ output "badge_url" {
   value = "${join("", aws_codebuild_project.codebuild_docker_image.*.badge_url)}"
 }
 
+output "artifact_store_bucket" {
+  value = "${aws_s3_bucket.default.id}"
+}
+
 //
 //output "webhook_id" {
 //  description = "The CodePipeline webhook's ARN."

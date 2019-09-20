@@ -114,7 +114,7 @@ resource "aws_codepipeline" "codepipeline" {
   }
 
   stage {
-    name = "BuildDocker"
+    name = "Build UMSL App"
 
     action {
       name            = "Build"
