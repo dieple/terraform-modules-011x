@@ -7,7 +7,7 @@ locals {
 provider "github" {
   version      = "~> 2.2"
   organization = "dieple"
-  token        = "${data.aws_kms_secrets.github_tokens.plaintext["github_oauth_token"]}"
+  token        = "${data.aws_kms_secrets.github_tokens.plaintext["umsl_oauth_token"]}"
 }
 
 data "aws_caller_identity" "default" {}
@@ -17,14 +17,14 @@ data "aws_region" "default" {}
 data "aws_kms_secrets" "umsl_oauth_token" {
   secret {
     name    = "${var.sm_oauth_token_secret_name}"
-    payload = "${var.github_oauth_token}"
+    payload = "${var.umsl_oauth_token}"
   }
 }
 
 data "aws_kms_secrets" "umsl_webhooks_token" {
   secret {
     name    = "${var.sm_webhooks_token_secret_name}"
-    payload = "${var.github_webhooks_token}"
+    payload = "${var.umsl_webhooks_token}"
   }
 }
 

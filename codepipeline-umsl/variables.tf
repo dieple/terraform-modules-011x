@@ -28,12 +28,12 @@ variable "enabled" {
 //  description = "ECS Service Name"
 //}
 
-variable "github_oauth_token" {
+variable "umsl_oauth_token" {
   type        = "string"
   description = "GitHub OAuth Token with permissions to access private repositories"
 }
 
-variable "github_webhooks_token" {
+variable "umsl_webhooks_token" {
   type        = "string"
   default     = ""
   description = "GitHub OAuth Token with permissions to create webhooks. If not provided, can be sourced from the `GITHUB_TOKEN` environment variable"
