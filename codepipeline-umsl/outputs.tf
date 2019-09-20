@@ -6,7 +6,7 @@ output "badge_url" {
 }
 
 output "artifact_store_bucket" {
-  value = "${aws_s3_bucket.default.id}"
+  value = "${join("", aws_s3_bucket.default.*.id)}"
 }
 
 //
