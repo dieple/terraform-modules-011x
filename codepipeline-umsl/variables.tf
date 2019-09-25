@@ -211,11 +211,13 @@ variable "github_repo_branch" {}
 
 variable "ecr_repo_uri" {}
 variable "github_repo_owner" {}
+
 //variable "eks_cluster_name" {}
 //variable "eks_kubectl_role_arn" {}
 //variable "codebuild_service_policy_arn" {}
 //variable "codebuild_service_role_arn" {}
 variable "source_location" {}
+
 variable "sm_webhooks_token_secret_name" {}
 variable "sm_oauth_token_secret_name" {}
 variable "vpc_id" {}

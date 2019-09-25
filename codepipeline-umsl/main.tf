@@ -1,5 +1,5 @@
 locals {
-  enabled                = "${var.enabled == "true" ? true : false}"
+  enabled             = "${var.enabled == "true" ? true : false}"
   umsl_oauth_token    = "${data.aws_kms_secrets.umsl_oauth_token.plaintext[var.sm_oauth_token_secret_name]}"
   umsl_webhooks_token = "${data.aws_kms_secrets.umsl_webhooks_token.plaintext[var.sm_webhooks_token_secret_name]}"
 }
@@ -180,16 +180,17 @@ resource "aws_codebuild_project" "codebuild_docker_image" {
         "name"  = "AWS_ACCOUNT_ID"
         "value" = "${data.aws_caller_identity.current.account_id}"
       },
-//      {
-//        "name"  = "ECR_IMAGE_REPO_NAME"
-//        "value" = "${signum(length(var.ecr_image_repo_names)) == 1 ? var.ecr_image_repo_names : "UNSET"}"
-//      },
-//      {
-//        "name"  = "ECR_REPO_URI"
-//        "value" = "${signum(length(var.ecr_image_repo_names)) == 1 ? format("%s.dkr.ecr.%s.amazonaws.com/%s", data.aws_caller_identity.current.account_id, data.aws_region.current.name, var.ecr_image_repo_names) : "UNSET"}"
-//      },
       {
-        "name"  = "ECR_IMAGE_TAG"
+        //      {
+        //        "name"  = "ECR_IMAGE_REPO_NAME"
+        //        "value" = "${signum(length(var.ecr_image_repo_names)) == 1 ? var.ecr_image_repo_names : "UNSET"}"
+        //      },
+        //      {
+        //        "name"  = "ECR_REPO_URI"
+        //        "value" = "${signum(length(var.ecr_image_repo_names)) == 1 ? format("%s.dkr.ecr.%s.amazonaws.com/%s", data.aws_caller_identity.current.account_id, data.aws_region.current.name, var.ecr_image_repo_names) : "UNSET"}"
+        //      },
+        "name" = "ECR_IMAGE_TAG"
+
         "value" = "${signum(length(var.ecr_image_tag)) == 1 ? var.ecr_image_tag : "latest"}"
       },
       {
@@ -208,15 +209,16 @@ resource "aws_codebuild_project" "codebuild_docker_image" {
         "name"  = "GITHUB_REPO_BRANCH"
         "value" = "${signum(length(var.github_repo_branch)) == 1 ? var.github_repo_branch : "UNSET"}"
       },
-//      {
-//        "name"  = "EKS_CLUSTER_NAME"
-//        "value" = "${signum(length(var.eks_cluster_name)) == 1 ? var.eks_cluster_name : "UNSET"}"
-//      },
-//      {
-//        "name"  = "EKS_KUBECTL_ROLE_ARN"
-//        "value" = "${signum(length(var.eks_kubectl_role_arn)) == 1 ? var.eks_kubectl_role_arn : "UNSET"}"
-//      },
     ]
+
+    //      {
+    //        "name"  = "EKS_CLUSTER_NAME"
+    //        "value" = "${signum(length(var.eks_cluster_name)) == 1 ? var.eks_cluster_name : "UNSET"}"
+    //      },
+    //      {
+    //        "name"  = "EKS_KUBECTL_ROLE_ARN"
+    //        "value" = "${signum(length(var.eks_kubectl_role_arn)) == 1 ? var.eks_kubectl_role_arn : "UNSET"}"
+    //      },
   }
 
   source {
