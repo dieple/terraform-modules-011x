@@ -14,7 +14,7 @@ data "aws_iam_policy_document" "assume_role" {
 
 module "aggregated_policy" {
   source           = "git::ssh://git@github.com/dieple/terraform-modules-011x.git//terraform-aws-iam-policy-document-aggregator"
-  source_documents = ["${var.additional_inline_policies}"]
+  source_documents = ["${var.policy_documents}"]
 }
 
 resource "aws_iam_policy" "default" {

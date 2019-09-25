@@ -38,7 +38,7 @@ variable "role_name" {
   description = "IAM role name."
 }
 
-variable "additional_inline_policies" {
+variable "policy_documents" {
   description = "Optional additional inline IAM policy documents."
   type        = "list"
   default     = []
