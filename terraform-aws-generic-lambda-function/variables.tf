@@ -1,20 +1,10 @@
-variable "name" {
+variable "function_name" {
   description = "Lambda function name"
   type        = "string"
 }
 
 variable "runtime" {
   description = "Lambda runtime type"
-  type        = "string"
-}
-
-variable "s3_bucket" {
-  description = "Name of s3 bucket used for Lambda build"
-  type        = "string"
-}
-
-variable "s3_key" {
-  description = "Key for s3 object for Lambda function code"
   type        = "string"
 }
 
@@ -96,3 +86,5 @@ variable "handler" {}
 variable "artifact_path" {
   default = "../../../lambda_functions"
 }
+
+variable "role" {}
