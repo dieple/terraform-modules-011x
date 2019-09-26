@@ -10,7 +10,7 @@ resource "aws_cloudwatch_log_group" "main" {
 resource "aws_lambda_function" "main" {
   function_name    = "${var.function_name}"
   filename         = "${var.artifact_path}/${var.function_name}.zip"
-  source_code_hash = "${base64sha256(file("${var.artifact_path}/${var.function_name}.zip"))}"
+  source_code_hash = "${base64sha256(file("${var.artifact_path}/${var.function_name}/${var.function_name}.zip"))}"
   description      = "${var.description}"
   handler          = "${var.handler}"
   runtime          = "${var.runtime}"
