@@ -87,4 +87,4 @@ variable "artifact_path" {
   default = "../../../lambda_functions"
 }
 
-variable "role" {}
+variable "role_arn" {}

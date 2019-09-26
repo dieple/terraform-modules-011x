@@ -1,6 +1,7 @@
 locals {
   zipfile = "${var.artifact_path}/${var.function_name}/${var.function_name}.zip"
 }
+
 # Cloudwatch Logs
 resource "aws_cloudwatch_log_group" "main" {
   name              = "/aws/lambda/${var.function_name}"
@@ -19,7 +20,7 @@ resource "aws_lambda_function" "main" {
   runtime          = "${var.runtime}"
   memory_size      = "${var.memory_size}"
   timeout          = "${var.timeout}"
-  role             = "${var.role}"
+  role             = "${var.role_arn}"
 
   depends_on = ["aws_cloudwatch_log_group.main"]
 
