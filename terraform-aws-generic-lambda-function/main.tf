@@ -1,3 +1,6 @@
+locals {
+  zipfile = "${var.artifact_path}/${var.function_name}/${var.function_name}.zip"
+}
 # Cloudwatch Logs
 resource "aws_cloudwatch_log_group" "main" {
   name              = "/aws/lambda/${var.function_name}"
@@ -9,8 +12,8 @@ resource "aws_cloudwatch_log_group" "main" {
 # Lambda function
 resource "aws_lambda_function" "main" {
   function_name    = "${var.function_name}"
-  filename         = "${var.artifact_path}/${var.function_name}.zip"
-  source_code_hash = "${base64sha256(file("${var.artifact_path}/${var.function_name}/${var.function_name}.zip"))}"
+  filename         = "${local.zipfile}"
+  source_code_hash = "${base64sha256(file("${local.zipfile}"))}"
   description      = "${var.description}"
   handler          = "${var.handler}"
   runtime          = "${var.runtime}"
