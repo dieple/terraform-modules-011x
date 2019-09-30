@@ -102,6 +102,8 @@ module "triggered-by-s3-notification" {
   lambda_function_arn = "${aws_lambda_function.lambda.arn}"
   bucket              = "${lookup(var.trigger, "bucket", "")}"
   events              = "${lookup(var.trigger, "events", "")}"
+  principal           = "${lookup(var.trigger, "principal", "")}"
+  source_arn          = "${lookup(var.trigger, "source_arn", "")}"
 }
 
 module "cloudwatch-log-subscription" {
