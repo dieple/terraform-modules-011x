@@ -1,11 +1,11 @@
 locals {
-  zipfile              = "${var.lambda_src_artifact_path}/${var.function_name}/${var.function_name}.zip"
+  zipfile              = "${var.lambda_src_artifact_path}/${var.function_name}/${var.file_name}"
   cloudwatch_log_group = "/aws/lambda/${var.function_name}"
 }
 
 # Create the lambda function
 resource "aws_lambda_function" "lambda" {
-  filename                       = "${var.file_name}"
+  filename                       = "${local.zipfile}"
   function_name                  = "${var.function_name}"
   layers                         = ["${var.layers}"]
   handler                        = "${var.handler}"
