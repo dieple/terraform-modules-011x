@@ -4,6 +4,6 @@ resource "aws_s3_bucket_notification" "s3_bucket_notification" {
 
   lambda_function {
     lambda_function_arn = "${var.lambda_function_arn}"
-    events              = ["${lookup(var.s3_config, "events")}"]
+    events              = "${split(",", lookup(var.s3_config, "events", ""))}"
   }
 }
