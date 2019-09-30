@@ -47,12 +47,14 @@ then
   wget -O  ${jenkins_mount_dir}/jenkins/jenkins.war https://updates.jenkins-ci.org/download/war/2.194/jenkins.war
   mkdir -p "${jenkins_mount_dir}/jenkins/plugins"
   wget -O  ${jenkins_mount_dir}/jenkins/plugins/blueocean.hpl https://updates.jenkins-ci.org/download/plugins/blueocean/1.19.0/blueocean.hpi
+  wget -O  ${jenkins_mount_dir}/jenkins/plugins/blueocean-github-pipeline.hpl https://updates.jenkins-ci.org/download/plugins/blueocean-github-pipeline/1.19.0/-github-pipelineblueocean.hpi
   wget -O  ${jenkins_mount_dir}/jenkins/plugins/build-pipeline-plugin.hpl https://updates.jenkins-ci.org/download/plugins/build-pipeline-plugin/1.5.8/build-pipeline-plugin.hpi
   wget -O  ${jenkins_mount_dir}/jenkins/plugins/ssh.hpl https://updates.jenkins-ci.org/download/plugins/ssh/2.6.1/ssh.hpi
   wget -O  ${jenkins_mount_dir}/jenkins/plugins/ssh-slaves.hpl https://updates.jenkins-ci.org/download/plugins/ssh-slaves/1.30.1/ssh-slaves.hpi
   wget -O  ${jenkins_mount_dir}/jenkins/plugins/ssh-agent.hpl https://updates.jenkins-ci.org/download/plugins/ssh-agent/1.17/ssh-agent.hpi
   wget -O  ${jenkins_mount_dir}/jenkins/plugins/multibranch-scan-webhook-trigger.hpl https://updates.jenkins-ci.org/download/plugins/multibranch-scan-webhook-trigger/1.0.5/multibranch-scan-webhook-trigger.hpi
   wget -O  ${jenkins_mount_dir}/jenkins/plugins/generic-webhook-trigger.hpl https://updates.jenkins-ci.org/download/plugins/generic-webhook-trigger/1.57/generic-webhook-trigger.hpi
+  wget -O  ${jenkins_mount_dir}/jenkins/plugins/aws-secrets-manager-credentials-provider.hpl https://updates.jenkins-ci.org/download/plugins/aws-secrets-manager-credentials-provider/0.0.1/aws-secrets-manager-credentials-provider.hpi
 else
   echo "file system exists - so mount it"
   mkdir -p ${jenkins_mount_dir}
