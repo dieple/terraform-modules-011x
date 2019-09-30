@@ -102,3 +102,5 @@ variable "sqs_config" {
   type    = "map"
   default = {}
 }
+
+variable "lambda_src_artifact_path" {}
