@@ -1,11 +1,3 @@
-variable "enable" {
-  default = 0
-}
-
-variable "region" {}
-
-variable "lambda_function_arn" {}
-
 resource "aws_lambda_permission" "allow_invocation_from_sfn" {
   count         = "${var.enable}"
   statement_id  = "AllowExecutionFromSfn"

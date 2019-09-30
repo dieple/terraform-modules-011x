@@ -1,14 +1,3 @@
-variable "enable" {
-  default = 0
-}
-
-variable "event_config" {
-  default = {}
-  type    = "map"
-}
-
-variable "lambda_function_arn" {}
-
 resource "aws_cloudwatch_event_rule" "event_rule" {
   count       = "${var.enable}"
   name        = "${lookup(var.event_config, "name")}"

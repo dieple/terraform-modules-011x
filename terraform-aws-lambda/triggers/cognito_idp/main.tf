@@ -1,9 +1,3 @@
-variable "enable" {
-  default = 0
-}
-
-variable "lambda_function_arn" {}
-
 resource "aws_lambda_permission" "allow_invocation_from_cognito_idp" {
   count         = "${var.enable}"
   statement_id  = "AllowExecutionFromCognito"

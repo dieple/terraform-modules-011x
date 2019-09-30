@@ -17,7 +17,7 @@ resource "aws_lambda_function" "lambda" {
   reserved_concurrent_executions = "${var.reserved_concurrent_executions}"
   publish                        = "${var.publish}"
   source_code_hash               = "${base64sha256(file("${local.zipfile}"))}"
-  vpc_config                     = "${var.vpc_config}"
+  vpc_config                     = ["${var.vpc_config}"]
 
   environment {
     variables = "${var.env_vars}"
@@ -101,10 +101,10 @@ module "triggered-by-s3-notification" {
   source              = "./triggers/s3_notification/"
   lambda_function_arn = "${aws_lambda_function.lambda.arn}"
 
-  s3_config = [{
+  s3_config = {
     bucket = "${split(",", lookup(var.trigger, "bucket", ""))}"
-    events =  "${split(",", lookup(var.trigger, "events", ""))}"
-  }]
+    events = "${split(",", lookup(var.trigger, "events", ""))}"
+  }
 }
 
 module "cloudwatch-log-subscription" {

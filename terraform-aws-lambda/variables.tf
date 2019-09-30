@@ -88,21 +88,6 @@ variable "cloudwatch_log_retention" {
   default = 90
 }
 
-variable "schedule_config" {
-  type    = "map"
-  default = {}
-}
-
-variable "event_config" {
-  type    = "map"
-  default = {}
-}
-
-variable "sqs_config" {
-  type    = "map"
-  default = {}
-}
-
 variable "lambda_src_artifact_path" {
   default = "../../../lambda_artifacts"
 }
