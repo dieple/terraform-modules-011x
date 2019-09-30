@@ -4,7 +4,6 @@ variable "enable" {
 
 variable "lambda_function_arn" {}
 
-variable "s3_config" {
-  type    = "map"
-  default = {}
-}
+variable "bucket" {}
+
+variable "events" {}
