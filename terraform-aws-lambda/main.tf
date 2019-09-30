@@ -97,7 +97,7 @@ module "triggered-by-sqs" {
 }
 
 module "triggered-by-s3-notification" {
-  enable              = "${split(",", lookup(var.trigger, "type", "")) == "s3" ? 1 : 0}"
+  enable              = "${lookup(var.trigger, "type", "") == "s3" ? 1 : 0}"
   source              = "./triggers/s3_notification/"
   lambda_function_arn = "${aws_lambda_function.lambda.arn}"
 
