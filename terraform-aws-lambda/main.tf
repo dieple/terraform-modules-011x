@@ -103,7 +103,7 @@ module "triggered-by-s3-notification" {
 
   s3_config = {
     bucket = "${lookup(var.trigger, "bucket", "")}"
-    events = "${lookup(var.trigger, "events", "")}"
+    events =  "${split(",", lookup(var.trigger, "events", ""))}"
   }
 }
 
