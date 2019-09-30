@@ -1,5 +1,5 @@
 locals {
-  source_code_hash     = "${base64sha256(file(var.lambda_src_artifact_path/var.file_name))}"
+  zipfile              = "${var.lambda_src_artifact_path}/${var.function_name}/${var.function_name}.zip"
   cloudwatch_log_group = "/aws/lambda/${var.function_name}"
 }
 
@@ -16,7 +16,7 @@ resource "aws_lambda_function" "lambda" {
   timeout                        = "${var.timeout}"
   reserved_concurrent_executions = "${var.reserved_concurrent_executions}"
   publish                        = "${var.publish}"
-  source_code_hash               = "${local.source_code_hash}"
+  source_code_hash               = "${base64sha256(file("${local.zipfile}"))}"
   vpc_config                     = "${var.vpc_config}"
 
   environment {

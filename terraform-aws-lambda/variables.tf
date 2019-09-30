@@ -103,4 +103,6 @@ variable "sqs_config" {
   default = {}
 }
 
-variable "lambda_src_artifact_path" {}
+variable "lambda_src_artifact_path" {
+  default = "../../../lambda_artifacts"
+}
