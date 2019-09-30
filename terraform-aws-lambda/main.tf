@@ -17,11 +17,7 @@ resource "aws_lambda_function" "lambda" {
   reserved_concurrent_executions = "${var.reserved_concurrent_executions}"
   publish                        = "${var.publish}"
   source_code_hash               = "${local.source_code_hash}"
-
-  vpc_config {
-    subnet_ids         = ["${var.subnet_ids}"]
-    security_group_ids = ["${var.security_group_ids}"]
-  }
+  vpc_config                     = "${var.vpc_config}"
 
   environment {
     variables = "${var.env_vars}"
