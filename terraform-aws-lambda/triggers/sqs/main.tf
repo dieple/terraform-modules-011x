@@ -1,17 +1,3 @@
-variable "enable" {
-  default = 0
-}
-
-variable "lambda_function_arn" {}
-
-variable "sqs_config" {
-  type = "map"
-}
-
-variable "tags" {
-  type = "map"
-}
-
 locals {
   sns_topics = "${compact(split(",", chomp(replace(lookup(var.sqs_config, "sns_topic_arn", ""), "\n", ""))))}"
 }
@@ -79,14 +65,4 @@ resource "aws_lambda_event_source_mapping" "event_source_mapping" {
   event_source_arn = "${element(aws_sqs_queue.sqs.*.arn, 0)}"
   enabled          = true
   function_name    = "${var.lambda_function_arn}"
-}
-
-output "dlq-id" {
-  description = "DLQ endpoint"
-  value       = "${aws_sqs_queue.sqs-deadletter.id}"
-}
-
-output "dlq-arn" {
-  description = "DLQ ARN"
-  value       = "${aws_sqs_queue.sqs-deadletter.arn}"
 }

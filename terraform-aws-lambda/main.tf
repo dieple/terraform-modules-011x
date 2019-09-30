@@ -105,8 +105,6 @@ module "triggered-by-s3-notification" {
     bucket = "${lookup(var.trigger, "bucket", "")}"
     events = "${lookup(var.trigger, "events", "")}"
   }
-
-  tags = "${var.tags}"
 }
 
 module "cloudwatch-log-subscription" {
