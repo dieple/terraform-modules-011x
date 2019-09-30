@@ -87,3 +87,18 @@ variable "enable_cloudwatch_log_subscription" {
 variable "cloudwatch_log_retention" {
   default = 90
 }
+
+variable "schedule_config" {
+  type    = "map"
+  default = {}
+}
+
+variable "event_config" {
+  type    = "map"
+  default = {}
+}
+
+variable "sqs_config" {
+  type    = "map"
+  default = {}
+}

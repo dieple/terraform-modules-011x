@@ -35,10 +35,10 @@ output source_code_size {
 
 output "dlq-url" {
   description = "AWS lambda DLQ URL"
-  value       = "${module.triggered-by-sqs.dlq-id}"
+  value       = "${module.triggered-by-sqs.*.dlq-id}"
 }
 
 output "dlq-arn" {
   description = "AWS lambda DLQ ARN"
-  value       = "${module.triggered-by-sqs.dlq-arn}"
+  value       = "${module.triggered-by-sqs.*.dlq-arn}"
 }
