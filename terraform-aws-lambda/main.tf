@@ -1,5 +1,5 @@
 locals {
-  source_code_hash     = "${base64sha256(file(var.file_name))}"
+  source_code_hash     = "${base64sha256(file(var.lambda_src_artifact_path/var.file_name))}"
   cloudwatch_log_group = "/aws/lambda/${var.function_name}"
 }
 
