@@ -97,12 +97,12 @@ module "triggered-by-sqs" {
 }
 
 module "triggered-by-s3-notification" {
-  enable              = "${lookup(var.trigger, "type", "") == "s3" ? 1 : 0}"
+  enable              = "${split(",", lookup(var.trigger, "type", "")) == "s3" ? 1 : 0}"
   source              = "./triggers/s3_notification/"
   lambda_function_arn = "${aws_lambda_function.lambda.arn}"
 
   s3_config = {
-    bucket = "${lookup(var.trigger, "bucket", "")}"
+    bucket = "${split(",", lookup(var.trigger, "bucket", ""))}"
     events =  "${split(",", lookup(var.trigger, "events", ""))}"
   }
 }
