@@ -1,8 +1,3 @@
-locals {
-  //  webhook_secret = "${join("", random_string.webhook_secret.*.result)}"
-  webhook_url = "${join("", aws_codepipeline_webhook.codepipeline_webhook.*.url)}"
-}
-
 data "aws_kms_secrets" "github_tokens" {
   secret {
     name    = "github_oauth_token"
@@ -15,65 +10,55 @@ data "aws_kms_secrets" "github_tokens" {
   }
 }
 
-resource "aws_codebuild_webhook" "cb_webhook_prs" {
-  project_name = "${aws_codebuild_project.codebuild_docker_image.name}"
+resource "aws_codebuild_webhook" "pipeline_webhook" {
+  project_name  = "${aws_codebuild_project.codebuild_docker_image.name}"
+  branch_filter = "master"
+  depends_on    = ["aws_codebuild_project.codebuild_docker_image"]
 
-  filter_group {
-    filter {
-      type    = "EVENT"
-      pattern = "PULL_REQUEST_CREATED, PULL_REQUEST_UPDATED, PULL_REQUEST_REOPENED"
-    }
-
-    filter {
-      type    = "BASE_REF"
-      pattern = "^refs/heads/master$"
-    }
-
-    filter {
-      type    = "HEAD_REF"
-      pattern = "^refs/heads/.*"
-    }
-  }
-
-  depends_on = [
-    "aws_codebuild_project.codebuild_docker_image",
-  ]
+  //  filter_group {
+  //    filter = "${var.filters}"
+  //  }
 }
 
-resource "aws_codepipeline_webhook" "codepipeline_webhook" {
-  count           = "${local.enabled && var.webhook_enabled == "true" ? 1 : 0}"
-  name            = "${module.codepipeline_label.id}"
-  authentication  = "${var.webhook_authentication}"
-  target_action   = "${var.webhook_target_action}"
-  target_pipeline = "${join("", aws_codepipeline.codepipeline.*.name)}"
-
-  authentication_configuration {
-    secret_token = "${data.aws_kms_secrets.github_tokens.plaintext["github_oauth_token"]}"
-  }
-
-  filter {
-    json_path    = "${var.webhook_filter_json_path}"
-    match_equals = "${var.webhook_filter_match_equals}"
-  }
-
-  //    depends_on = [
-  //      "aws_codepipeline.codepipeline.name",
-  //    ]
-}
-
-resource "github_repository_webhook" "gh_repo_webhook" {
+resource "github_repository_webhook" "pipepline_github_webhook" {
+  active     = true
+  events     = "${var.github_events}"
   repository = "${var.github_repo_names}"
 
   configuration {
-    url          = "${local.webhook_url}"
+    url          = "${aws_codebuild_webhook.pipeline_webhook.payload_url}"
+    secret       = "${data.aws_kms_secrets.github_tokens.plaintext["github_oauth_token"]}"
     content_type = "json"
     insecure_ssl = false
-    secret       = "${data.aws_kms_secrets.github_tokens.plaintext["github_webhooks_token"]}"
   }
 
-  events = ["${var.github_webhook_events}"]
+  lifecycle {
+    # This is required for idempotency
+    ignore_changes = ["configuration.secret"]
+  }
 
-  //depends_on = [
-  //  aws_codepipeline_webhook.pipelines,
-  //  ]
+  depends_on = ["aws_codebuild_project.codebuild_docker_image"]
 }
+
+//
+//resource "aws_codepipeline_webhook" "default" {
+//  name            = "${aws_codepipeline.codepipeline.name}"
+//  authentication  = "${var.webhook_authentication}"
+//  target_action   = "${var.webhook_target_action}"
+//  target_pipeline = "${aws_codepipeline.codepipeline.name}"
+//
+//  authentication_configuration {
+//    secret_token = "${local.dataops_oauth_token}"
+//  }
+//
+//  filter {
+//    json_path    = "$.ref"
+//    match_equals = "refs/heads/{Branch}"
+//  }
+//
+//  depends_on = [
+//    "aws_codepipeline.codepipeline",
+//  ]
+//}
+//
+

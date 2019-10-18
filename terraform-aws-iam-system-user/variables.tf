@@ -24,3 +24,7 @@ variable "policy" {
   description = "List of JSON IAM policy documents"
   default     = ""
 }
+
+variable "enabled" {
+  default = "false"
+}

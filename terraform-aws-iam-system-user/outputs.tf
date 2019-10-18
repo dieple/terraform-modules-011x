@@ -19,9 +19,7 @@ output "access_key_id" {
 }
 
 output "secret_access_key" {
-  sensitive = true
-
-  //  value       = "${join("", aws_iam_access_key.default.*.secret)}"
+  sensitive   = true
+  value       = "${join("", aws_iam_access_key.default.*.secret)}"
   description = "The IAM user secret access key, encrypted with the PGP key supplied and b64 encoded in the output. Base64 decode this output and supply to gpg to decrypt."
-  value       = "${aws_iam_access_key.default.encrypted_secret}"
 }

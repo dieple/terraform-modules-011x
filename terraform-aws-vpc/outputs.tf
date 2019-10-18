@@ -475,3 +475,12 @@ output "azs" {
   description = "A list of availability zones specified as argument to this module"
   value       = "${var.azs}"
 }
+
+# Static values (arguments)
+output "availability_zones" {
+  value = "${var.azs}"
+}
+
+output "aws_zone_id" {
+  values = "dummy-not-use-but-needed-for-tf-remote-state-to-work"
+}

@@ -6,7 +6,7 @@ This module creates an AWS lambda and all the related resources.
 ## Usage
 ```hcl
 module "lambda-foo" {
-  source = "github.com/river-island/terraform-modules-011x.git//terraform-aws-lambda"
+  source = "github.com/dieple/terraform-modules-011x.git//terraform-aws-lambda"
   file_name = "../../../lambda_artifacts/<lambda-function-name>/<lambda-function-name>.zip"
   layers = ["${aws_lambda_layer_version.my_awesome_layer.arn}"]
 

@@ -36,6 +36,12 @@ resource "aws_iam_role_policy_attachment" "default" {
   policy_arn = "${aws_iam_policy.default.arn}"
 }
 
+resource "aws_iam_role_policy_attachment" "additional" {
+  count      = "${length(var.addtional_policy_arns)}"
+  policy_arn = "${element(var.addtional_policy_arns, count.index)}"
+  role       = "${aws_iam_role.default.name}"
+}
+
 resource "aws_iam_instance_profile" "this" {
   count = "${var.create_ec2_profile}"
   name  = "${var.role_name}-profile"

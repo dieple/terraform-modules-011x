@@ -1,5 +1,4 @@
 locals {
-  enabled                = "${var.enabled == "true" ? true : false}"
   dataops_oauth_token    = "${data.aws_kms_secrets.dataops_oauth_token.plaintext[var.sm_oauth_token_secret_name]}"
   dataops_webhooks_token = "${data.aws_kms_secrets.dataops_webhooks_token.plaintext[var.sm_webhooks_token_secret_name]}"
 }
@@ -10,9 +9,9 @@ provider "github" {
   token        = "${data.aws_kms_secrets.github_tokens.plaintext["github_oauth_token"]}"
 }
 
-data "aws_caller_identity" "default" {}
+data "aws_region" "current" {}
 
-data "aws_region" "default" {}
+data "aws_caller_identity" "current" {}
 
 data "aws_kms_secrets" "dataops_oauth_token" {
   secret {
@@ -28,67 +27,12 @@ data "aws_kms_secrets" "dataops_webhooks_token" {
   }
 }
 
-module "codepipeline_label" {
-  source     = "git::ssh://git@github.com/dieple/terraform-modules-011x.git//terraform-terraform-label"
-  attributes = ["${compact(concat(var.attributes, list("codepipeline")))}"]
-  delimiter  = "${var.delimiter}"
-  name       = "${var.name}"
-  namespace  = "${var.namespace}"
-  stage      = "${var.stage}"
-  tags       = "${var.tags}"
-}
-
-resource "aws_s3_bucket" "default" {
-  count         = "${local.enabled ? 1 : 0}"
-  bucket        = "${module.codepipeline_label.id}-${var.github_repo_names}"
-  acl           = "private"
-  force_destroy = "${var.s3_bucket_force_destroy}"
-  tags          = "${module.codepipeline_label.tags}"
-}
-
-module "codepipeline_assume_label" {
-  source     = "git::ssh://git@github.com/dieple/terraform-modules-011x.git//terraform-terraform-label"
-  attributes = ["${compact(concat(var.attributes, list("codepipeline", "assume")))}"]
-  delimiter  = "${var.delimiter}"
-  name       = "${var.name}"
-  namespace  = "${var.namespace}"
-  stage      = "${var.stage}"
-  tags       = "${var.tags}"
-}
-
-module "codepipeline_s3_policy_label" {
-  source     = "git::ssh://git@github.com/dieple/terraform-modules-011x.git//terraform-terraform-label"
-  attributes = ["${compact(concat(var.attributes, list("codepipeline", "s3")))}"]
-  delimiter  = "${var.delimiter}"
-  name       = "${var.name}"
-  namespace  = "${var.namespace}"
-  stage      = "${var.stage}"
-  tags       = "${var.tags}"
-}
-
-resource "aws_iam_policy" "s3" {
-  count  = "${local.enabled ? 1 : 0}"
-  name   = "${module.codepipeline_s3_policy_label.id}-${var.github_repo_names}"
-  policy = "${data.aws_iam_policy_document.s3.json}"
-}
-
-module "codebuild_label" {
-  source     = "git::ssh://git@github.com/dieple/terraform-modules-011x.git//terraform-terraform-label"
-  attributes = ["${compact(concat(var.attributes, list("codebuild")))}"]
-  delimiter  = "${var.delimiter}"
-  name       = "${var.name}"
-  namespace  = "${var.namespace}"
-  stage      = "${var.stage}"
-  tags       = "${var.tags}"
-}
-
 resource "aws_codepipeline" "codepipeline" {
-  count    = "${local.enabled == "true" ? 1 : 0}"
-  name     = "${var.github_repo_names}-pipeline"
-  role_arn = "${aws_iam_role.iam_codepipeline_role.arn}"
+  name     = "${var.name}-codepipeline"
+  role_arn = "${var.codepipeline_role_arn}"
 
   artifact_store {
-    location = "${aws_s3_bucket.default.bucket}"
+    location = "${var.artifact_store_bucket_name}"
     type     = "S3"
   }
 
@@ -114,7 +58,7 @@ resource "aws_codepipeline" "codepipeline" {
   }
 
   stage {
-    name = "BuildDocker"
+    name = "BuildDockerImage"
 
     action {
       name            = "Build"
@@ -153,17 +97,19 @@ resource "aws_codepipeline" "codepipeline" {
 }
 
 resource "aws_codebuild_project" "codebuild_docker_image" {
-  count         = "${local.enabled == "true" ? 1 : 0}"
-  name          = "${var.github_repo_names}"
+  name          = "${var.name}-codebuild-project-docker-image"
   description   = "build docker images"
   build_timeout = "300"
-  service_role  = "${aws_iam_role.iam_code_build_role.arn}"
+  service_role  = "${var.codebuild_service_role_arn}"
 
   artifacts {
-    type = "CODEPIPELINE"
-
-    //    type = "NO_ARTIFACTS"
+    type = "NO_ARTIFACTS"
   }
+
+  //  cache {
+  //    type     = "S3"
+  //    location = "${var.artifact_store_bucket_name}"
+  //  }
 
   environment {
     compute_type    = "${var.build_compute_type}"
@@ -216,15 +162,23 @@ resource "aws_codebuild_project" "codebuild_docker_image" {
         "name"  = "EKS_KUBECTL_ROLE_ARN"
         "value" = "${signum(length(var.eks_kubectl_role_arn)) == 1 ? var.eks_kubectl_role_arn : "UNSET"}"
       },
+      {
+        "name"  = "KMS_KEY_ARN"
+        "value" = "${signum(length(var.kms_key_arn)) == 1 ? var.kms_key_arn : "UNSET"}"
+      },
     ]
   }
-
   source {
-    type                = "CODEPIPELINE"
+    type                = "GITHUB"
     buildspec           = "ci/buildspec.yml"
     location            = "${format("%s/%s/%s.git", var.source_location, var.github_repo_owner, var.github_repo_names)}"
     report_build_status = "${var.report_build_status}"
     git_clone_depth     = 1
+
+    auth = {
+      type     = "OAUTH"
+      resource = "${local.dataops_oauth_token}"
+    }
   }
 
   //  vpc_config {
@@ -239,5 +193,5 @@ resource "aws_codebuild_project" "codebuild_docker_image" {
   //    ]
   //  }
 
-  tags = "${module.codebuild_label.tags}"
+  //  tags = "${var.tags}"
 }

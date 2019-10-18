@@ -41,3 +41,9 @@ variable "path" {
 }
 
 variable "role_name" {}
+
+variable "addtional_policy_arns" {
+  description = "Optional additional attached IAM policy ARNs."
+  type        = "list"
+  default     = []
+}

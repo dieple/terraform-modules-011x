@@ -1,23 +1,3 @@
-variable "namespace" {
-  default     = "global"
-  description = "Namespace, which could be your organization name, e.g. 'cp' or 'cloudposse'"
-}
-
-variable "stage" {
-  default     = "default"
-  description = "Stage, e.g. 'prod', 'staging', 'dev', or 'test'"
-}
-
-variable "name" {
-  default     = "app"
-  description = "Solution name, e.g. 'app' or 'jenkins'"
-}
-
-variable "enabled" {
-  default     = "true"
-  description = "Enable `CodePipeline` creation"
-}
-
 variable "ecs_cluster_name" {
   type        = "string"
   description = "ECS Cluster Name"
@@ -78,18 +58,6 @@ variable "poll_source_changes" {
   type        = "string"
   default     = "false"
   description = "Periodically check the location of your source content and run the pipeline if changes are detected"
-}
-
-variable "delimiter" {
-  type        = "string"
-  default     = "-"
-  description = "Delimiter to be used between `name`, `namespace`, `stage`, etc."
-}
-
-variable "attributes" {
-  type        = "list"
-  default     = []
-  description = "Additional attributes (e.g. `policy` or `role`)"
 }
 
 variable "tags" {
@@ -215,7 +183,37 @@ variable "eks_cluster_name" {}
 variable "eks_kubectl_role_arn" {}
 variable "codebuild_service_policy_arn" {}
 variable "codebuild_service_role_arn" {}
+variable "codepipeline_role_arn" {}
 variable "source_location" {}
 variable "sm_webhooks_token_secret_name" {}
 variable "sm_oauth_token_secret_name" {}
 variable "vpc_id" {}
+variable "name" {}
+variable "stage" {}
+variable "artifact_store_bucket_name" {}
+variable "kms_key_arn" {}
+
+variable "filters" {
+  type = "list"
+
+  default = [
+    {
+      type    = "EVENT"
+      pattern = "PULL_REQUEST_CREATED, PULL_REQUEST_UPDATED, PULL_REQUEST_REOPENED"
+    },
+    {
+      type    = "BASE_REF"
+      pattern = "^refs/heads/master$"
+    },
+    {
+      type    = "HEAD_REF"
+      pattern = "^refs/heads/.*"
+    },
+  ]
+}
+
+variable "github_events" {
+  type        = "list"
+  description = "Github events that this pipeline will be executed"
+  default     = ["push", "pull_request"]
+}
