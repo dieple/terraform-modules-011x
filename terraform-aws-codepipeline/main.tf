@@ -102,6 +102,20 @@ resource "aws_codebuild_project" "codebuild_docker_image" {
   build_timeout = "300"
   service_role  = "${var.codebuild_service_role_arn}"
 
+  source {
+    //    type                = "GITHUB_ENTERPRISE"
+    type                = "GITHUB"
+    buildspec           = "ci/buildspec.yml"
+    location            = "${format("%s/%s/%s.git", var.source_location, var.github_repo_owner, var.github_repo_names)}"
+    report_build_status = "${var.report_build_status}"
+    git_clone_depth     = 1
+
+    auth = {
+      type     = "OAUTH"
+      resource = "${local.dataops_oauth_token}"
+    }
+  }
+
   artifacts {
     type = "NO_ARTIFACTS"
   }
@@ -167,18 +181,18 @@ resource "aws_codebuild_project" "codebuild_docker_image" {
         "value" = "${signum(length(var.kms_key_arn)) == 1 ? var.kms_key_arn : "UNSET"}"
       },
     ]
-  }
-  source {
-    type                = "GITHUB"
-    buildspec           = "ci/buildspec.yml"
-    location            = "${format("%s/%s/%s.git", var.source_location, var.github_repo_owner, var.github_repo_names)}"
-    report_build_status = "${var.report_build_status}"
-    git_clone_depth     = 1
+  //}
+  //source {
+  //  type                = "GITHUB"
+  //  buildspec           = "ci/buildspec.yml"
+  //  location            = "${format("%s/%s/%s.git", var.source_location, var.github_repo_owner, var.github_repo_names)}"
+  //  report_build_status = "${var.report_build_status}"
+  //  git_clone_depth     = 1
 
-    auth = {
-      type     = "OAUTH"
-      resource = "${local.dataops_oauth_token}"
-    }
+  //  auth = {
+  //    type     = "OAUTH"
+  //    resource = "${local.dataops_oauth_token}"
+  //  }
   }
 
   //  vpc_config {

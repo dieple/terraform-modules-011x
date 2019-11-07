@@ -11,13 +11,14 @@ data "aws_kms_secrets" "github_tokens" {
 }
 
 resource "aws_codebuild_webhook" "pipeline_webhook" {
-  project_name  = "${aws_codebuild_project.codebuild_docker_image.name}"
-  branch_filter = "master"
-  depends_on    = ["aws_codebuild_project.codebuild_docker_image"]
+  project_name = "${aws_codebuild_project.codebuild_docker_image.name}"
 
   //  filter_group {
   //    filter = "${var.filters}"
   //  }
+  branch_filter = "^(?!master).*$"
+
+  depends_on = ["aws_codebuild_project.codebuild_docker_image"]
 }
 
 resource "github_repository_webhook" "pipepline_github_webhook" {

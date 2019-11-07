@@ -382,6 +382,7 @@ data "aws_iam_policy_document" "worker_external_dns" {
     effect = "Allow"
 
     actions = [
+      "route53:GetChange",
       "route53:ChangeResourceRecordSets",
     ]
 
@@ -394,6 +395,7 @@ data "aws_iam_policy_document" "worker_external_dns" {
 
     actions = [
       "route53:ListHostedZones",
+      "route53:ListHostedZonesByName",
       "route53:ListResourceRecordSets",
     ]
 
