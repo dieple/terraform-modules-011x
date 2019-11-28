@@ -8,6 +8,11 @@ variable "main_vpc" {
   description = "Main VPC ID that will be associated with this hosted zone"
 }
 
+variable "parent_zone_name" {
+  type = "string"
+  description = "The parent zone name that should have NS records from the main zone_name added to it"
+}
+
 variable "secondary_vpcs" {
   type        = "list"
   default     = []

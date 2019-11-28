@@ -46,10 +46,26 @@ output "azs" {
   value = ["${data.terraform_remote_state.vpc.azs}"]
 }
 
+output "availability_zones" {
+  value = ["${data.terraform_remote_state.vpc.availability_zones}"]
+}
+
 output "private_subnets_cidr_blocks" {
   value = ["${data.terraform_remote_state.vpc.private_subnets_cidr_blocks}"]
 }
 
 output "public_subnets_cidr_blocks" {
   value = ["${data.terraform_remote_state.vpc.public_subnets_cidr_blocks}"]
+}
+
+output "key_name" {
+  value = "${data.terraform_remote_state.vpc.key_name}"
+}
+
+output "ssh_cidr_block" {
+  value = ["${data.terraform_remote_state.vpc.ssh_cidr_block}"]
+}
+
+output "aws_zone_id" {
+  value = "${data.terraform_remote_state.vpc.aws_zone_id}"
 }
