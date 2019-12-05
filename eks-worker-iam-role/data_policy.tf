@@ -390,6 +390,16 @@ data "aws_iam_policy_document" "worker_external_dns" {
   }
 
   statement {
+    sid    = "eksWorkerExternalDnsCertManager"
+    effect = "Allow"
+
+    actions = [
+      "route53:GetChange",
+    ]
+
+    resources = ["*"]
+  }
+  statement {
     sid    = "eksWorkerListDns"
     effect = "Allow"
 
