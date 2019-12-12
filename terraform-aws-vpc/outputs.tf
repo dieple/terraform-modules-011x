@@ -481,6 +481,3 @@ output "availability_zones" {
   value = "${var.azs}"
 }
 
-output "aws_zone_id" {
-  values = "dummy-not-use-but-needed-for-tf-remote-state-to-work"
-}

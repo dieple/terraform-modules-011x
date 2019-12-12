@@ -65,7 +65,3 @@ output "key_name" {
 output "ssh_cidr_block" {
   value = ["${data.terraform_remote_state.vpc.ssh_cidr_block}"]
 }
-
-output "aws_zone_id" {
-  value = "${data.terraform_remote_state.vpc.aws_zone_id}"
-}
