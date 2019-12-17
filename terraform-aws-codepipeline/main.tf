@@ -5,7 +5,7 @@ locals {
 
 provider "github" {
   version      = "~> 2.2"
-  organization = "dieple"
+  organization = "${var.github_repo_owner}"
   token        = "${data.aws_kms_secrets.github_tokens.plaintext["github_oauth_token"]}"
 }
 
