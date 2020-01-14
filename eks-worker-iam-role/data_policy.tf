@@ -249,6 +249,7 @@ data "aws_iam_policy_document" "k8s_pods_policy" {
       "ec2:RunInstances",
       "ec2:UpdateSecurityGroupRuleDescriptionsEgress",
       "ec2:UpdateSecurityGroupRuleDescriptionsIngress",
+      "kms:"
     ]
 
     resources = ["*"]
