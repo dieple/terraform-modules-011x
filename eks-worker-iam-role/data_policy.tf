@@ -249,7 +249,7 @@ data "aws_iam_policy_document" "k8s_pods_policy" {
       "ec2:RunInstances",
       "ec2:UpdateSecurityGroupRuleDescriptionsEgress",
       "ec2:UpdateSecurityGroupRuleDescriptionsIngress",
-      "kms:"
+      "kms:Encrypt*"
     ]
 
     resources = ["*"]
@@ -436,6 +436,7 @@ data "aws_iam_policy_document" "worker_autoscaling" {
       "autoscaling:SetDesiredCapacity",
       "autoscaling:SuspendProcesses",
       "autoscaling:UpdateAutoScalingGroup",
+      "autoscaling:TerminateInstanceInAutoScalingGroup",
       "ec2:DescribeLaunchTemplateVersions",
     ]
 
